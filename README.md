@@ -17,10 +17,8 @@ This guide is for an obsolete iOS version while I still wrote it down, as I coul
   `./sshrd.sh ssh`
 - Mount system partition  
   `mount_apfs /dev/disk0s1s1 /mnt1`
-- Obtain snapshot name on system partition  
-  `snaputil -l /mnt1`
-- The snapshot name will be displayed, it should be a random string like com.apple.os.update-xxxxxxxx. Run the following command to rename snapshot, replace $name with the one displayed above  
-  `snaputil -n $name orig-fs /mnt1`
+- Rename system snapshot to orig-fs, it is actually for 11.3+ while there is no need to know iOS version, just run the command, on lower versions it won't change anything
+  `snaputil -n $(snaputil -l /mnt1) orig-fs /mnt1`
 - Remove setup.app  
   `rm -rf /mnt1/Applications/Setup.app`
 - On iOS 10+, the device needs to be reset after removing setup.app via ramdisk  
@@ -29,6 +27,5 @@ This guide is for an obsolete iOS version while I still wrote it down, as I coul
   `/sbin/reboot`
 ## Notes
 - Sometimes SSHRD_Script randomly says error init failed or an error occurred, check internet connection and run previous command again
-- On early iOS 11 there is no snapshot on /mnt1, probably 11.0-11.2.6. If nothing is displayed after running `snaputil -l /mnt1`, skip next step
 - It is a bare-bones bypass, allowing you to access home screen but many things will be broken, such as cellular, iCloud, sideloading, iTunes sync, notifications, etc.
 - This guide is about hello screen setup.app removal, for passcode locked iOS 11 devices, try using [this modified SSHRD_Script](https://github.com/iPh0ne4s/SSHRD_Script) to backup and restore activation files without updating
